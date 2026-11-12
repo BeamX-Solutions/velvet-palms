@@ -5,7 +5,7 @@ capped at 100 seats.
 
 **Stack:** Next.js 15 (App Router) · Postgres (Supabase) · Resend (email) · Netlify (hosting)
 
-**Live at:** https://beamxsolutions.com/velvetpalms (served through the beamxsolutions.com site; see *Hosting under beamxsolutions.com* below)
+**Live at:** https://velvetpalms.beamxsolutions.com (Netlify)
 
 ## What's included
 
@@ -31,7 +31,7 @@ capped at 100 seats.
 npm install
 cp .env.example .env.local        # fill in DATABASE_URL and ADMIN_PASSWORD
 npm run db:setup                  # creates tables, function and the two sittings
-npm run dev                       # http://localhost:3000/velvetpalms
+npm run dev                       # http://localhost:3000
 ```
 
 ## Deploy (about 20 minutes)
@@ -43,10 +43,10 @@ npm run dev                       # http://localhost:3000/velvetpalms
    - Create an account at resend.com, verify the restaurant's domain, create an API key.
    - Set `RESEND_API_KEY` and `EMAIL_FROM` (e.g. `Velvet Palms <reservations@velvetpalms.com>`).
    - Without a key, bookings still work; the email is skipped and the guest saves their ticket page.
-3. **Hosting: Netlify, under beamxsolutions.com/velvetpalms**
-   - See *Hosting under beamxsolutions.com/velvetpalms* at the end of this file.
+3. **Hosting: Netlify**
+   - See *Hosting* at the end of this file.
 
-> `SITE_URL` must be the live address (`https://beamxsolutions.com/velvetpalms`) before guests book: it is baked into the QR codes and emails.
+> `SITE_URL` must be the live address (`https://velvetpalms.beamxsolutions.com`) before guests book: it is baked into the QR codes and emails.
 
 ## Editing content
 - **Event details** (date, dress code, address, phone, Instagram): `lib/config.ts`
@@ -63,29 +63,21 @@ npm run dev                       # http://localhost:3000/velvetpalms
 - [ ] Domain bought, `SITE_URL` updated, Resend domain verified
 - [ ] Note: the logo reads "Since 2025"; confirm with the client if the opening is in 2026
 
-## Hosting under beamxsolutions.com/velvetpalms
-The app runs as its own Netlify site, and the main beamxsolutions.com site forwards `/velvetpalms` to it,
-so visitors only ever see beamxsolutions.com.
+## Hosting
+The site runs on Netlify from `BeamX-Solutions/velvet-palms` (`main` deploys automatically) at
+**https://velvetpalms.beamxsolutions.com**.
 
-1. **Deploy this repo as a new Netlify site** (Add new site > Import from GitHub > `BeamX-Solutions/velvet-palms`).
-   Netlify detects Next.js automatically. Add the environment variables: `DATABASE_URL`, `ADMIN_USER`,
-   `ADMIN_PASSWORD`, `SITE_URL=https://beamxsolutions.com/velvetpalms`, and optionally `RESEND_API_KEY` and `EMAIL_FROM`.
-2. **Check it works** at `https://<new-site>.netlify.app/velvetpalms`.
-3. **Add the proxy to the main site** (`BeamX-Solutions/beam_x_solutions`, `netlify.toml`), above any catch-all rule:
-   ```toml
-   [[redirects]]
-     from = "/velvetpalms"
-     to = "https://<new-site>.netlify.app/velvetpalms"
-     status = 200
-     force = true
+Netlify environment variables: `DATABASE_URL`, `ADMIN_USER`, `ADMIN_PASSWORD` (a strong password that does not
+contain "velvetpalms", or Netlify's secret scan fails the build), `SITE_URL=https://velvetpalms.beamxsolutions.com`,
+and optionally `RESEND_API_KEY` and `EMAIL_FROM`.
 
-   [[redirects]]
-     from = "/velvetpalms/*"
-     to = "https://<new-site>.netlify.app/velvetpalms/:splat"
-     status = 200
-     force = true
-   ```
-
-All pages, files and the staff area live under `/velvetpalms` (set by `basePath` in `next.config.mjs`).
-Booking forms submitted through beamxsolutions.com are allowed by `ALLOWED_ORIGINS` (default: beamxsolutions.com).
-
+**Serving it under a path instead** (e.g. beamxsolutions.com/velvetpalms): set `NEXT_PUBLIC_BASE_PATH=/velvetpalms`
+and `ALLOWED_ORIGINS=beamxsolutions.com`, set `SITE_URL` to the full address, and add a proxy rule to the main site's
+`netlify.toml`, above its catch-all `/*` rule:
+```toml
+[[redirects]]
+  from = "/velvetpalms/*"
+  to = "https://velvetpalms.beamxsolutions.com/velvetpalms/:splat"
+  status = 200
+  force = true
+```

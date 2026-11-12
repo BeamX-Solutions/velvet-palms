@@ -1,9 +1,10 @@
-// The site is served at beamxsolutions.com/velvetpalms. Set NEXT_PUBLIC_BASE_PATH to '' to serve it at the root instead.
-const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? '/velvetpalms';
+// The site is served at the root of velvetpalms.beamxsolutions.com.
+// To serve it under a path instead (e.g. beamxsolutions.com/velvetpalms), set NEXT_PUBLIC_BASE_PATH=/velvetpalms.
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
 
-// Hosts allowed to submit the booking forms. Requests arrive through the beamxsolutions.com proxy,
-// so its host must be listed or Next.js rejects the form as cross-site.
-const allowedOrigins = (process.env.ALLOWED_ORIGINS ?? 'beamxsolutions.com,www.beamxsolutions.com')
+// Extra hosts allowed to submit the booking forms. Only needed if another site proxies to this one
+// (e.g. ALLOWED_ORIGINS=beamxsolutions.com); the site's own domain is always allowed.
+const allowedOrigins = (process.env.ALLOWED_ORIGINS ?? '')
   .split(',').map((s) => s.trim()).filter(Boolean);
 
 /** @type {import('next').NextConfig} */
