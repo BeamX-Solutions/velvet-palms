@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
-import { siteUrl } from '@/lib/config';
+import { basePath, siteUrl } from '@/lib/config';
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Velvet Palms Opening Night | 12 December 2026',
     description: 'Opening Night in Awka. 100 seats. Reserve yours.',
-    images: ['/brand/logo-full.png'],
+    images: [`${siteUrl}/brand/logo-full.png`],
   },
 };
 
@@ -23,7 +23,7 @@ export const viewport: Viewport = { themeColor: '#011c13' };
 //   dropped before the browser can jump to it;
 // - on the home page, opens the curtain, then clears the flag once it has finished so moving
 //   around inside the site does not replay it.
-const boot = `(function(){var d=document.documentElement;d.classList.add('js');try{if('scrollRestoration' in history)history.scrollRestoration='manual';if(location.hash)history.replaceState(null,'',location.pathname+location.search);}catch(e){}var top=function(){window.scrollTo({top:0,left:0,behavior:'instant'})};top();addEventListener('load',top);if(location.pathname==='/'){d.classList.add('doors-on');setTimeout(function(){d.classList.remove('doors-on')},3000)}})()`;
+const boot = `(function(){var d=document.documentElement;d.classList.add('js');try{if('scrollRestoration' in history)history.scrollRestoration='manual';if(location.hash)history.replaceState(null,'',location.pathname+location.search);}catch(e){}var top=function(){window.scrollTo({top:0,left:0,behavior:'instant'})};top();addEventListener('load',top);var home='${basePath}'||'/';var p=location.pathname;if(p===home||p===home+'/'){d.classList.add('doors-on');setTimeout(function(){d.classList.remove('doors-on')},3000)}})()`;
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (

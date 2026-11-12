@@ -3,7 +3,9 @@
 A single-page site for Velvet Palms (Awka) with a free reservation system for Opening Night,
 capped at 100 seats.
 
-**Stack:** Next.js 15 (App Router) · Postgres (Supabase) · Resend (email) · Vercel (hosting)
+**Stack:** Next.js 15 (App Router) · Postgres (Supabase) · Resend (email) · Netlify (hosting)
+
+**Live at:** https://beamxsolutions.com/velvetpalms (served through the beamxsolutions.com site; see *Hosting under beamxsolutions.com* below)
 
 ## What's included
 
@@ -29,7 +31,7 @@ capped at 100 seats.
 npm install
 cp .env.example .env.local        # fill in DATABASE_URL and ADMIN_PASSWORD
 npm run db:setup                  # creates tables, function and the two sittings
-npm run dev                       # http://localhost:3000
+npm run dev                       # http://localhost:3000/velvetpalms
 ```
 
 ## Deploy (about 20 minutes)
@@ -41,13 +43,10 @@ npm run dev                       # http://localhost:3000
    - Create an account at resend.com, verify the restaurant's domain, create an API key.
    - Set `RESEND_API_KEY` and `EMAIL_FROM` (e.g. `Velvet Palms <reservations@velvetpalms.com>`).
    - Without a key, bookings still work; the email is skipped and the guest saves their ticket page.
-3. **Hosting: Vercel**
-   - Push this folder to a GitHub repo, import it in Vercel.
-   - Add environment variables: `DATABASE_URL`, `SITE_URL` (the live URL, no trailing slash),
-     `ADMIN_USER`, `ADMIN_PASSWORD`, `RESEND_API_KEY`, `EMAIL_FROM`.
-   - Deploy. When the domain is bought, add it in Vercel and update `SITE_URL`.
+3. **Hosting: Netlify, under beamxsolutions.com/velvetpalms**
+   - See *Hosting under beamxsolutions.com/velvetpalms* at the end of this file.
 
-> `SITE_URL` must be the live address before guests book: it is baked into the QR codes and emails.
+> `SITE_URL` must be the live address (`https://beamxsolutions.com/velvetpalms`) before guests book: it is baked into the QR codes and emails.
 
 ## Editing content
 - **Event details** (date, dress code, address, phone, Instagram): `lib/config.ts`
@@ -63,3 +62,30 @@ npm run dev                       # http://localhost:3000
 - [ ] Strong `ADMIN_PASSWORD`; share it only with door staff
 - [ ] Domain bought, `SITE_URL` updated, Resend domain verified
 - [ ] Note: the logo reads "Since 2025"; confirm with the client if the opening is in 2026
+
+## Hosting under beamxsolutions.com/velvetpalms
+The app runs as its own Netlify site, and the main beamxsolutions.com site forwards `/velvetpalms` to it,
+so visitors only ever see beamxsolutions.com.
+
+1. **Deploy this repo as a new Netlify site** (Add new site > Import from GitHub > `BeamX-Solutions/velvet-palms`).
+   Netlify detects Next.js automatically. Add the environment variables: `DATABASE_URL`, `ADMIN_USER`,
+   `ADMIN_PASSWORD`, `SITE_URL=https://beamxsolutions.com/velvetpalms`, and optionally `RESEND_API_KEY` and `EMAIL_FROM`.
+2. **Check it works** at `https://<new-site>.netlify.app/velvetpalms`.
+3. **Add the proxy to the main site** (`BeamX-Solutions/beam_x_solutions`, `netlify.toml`), above any catch-all rule:
+   ```toml
+   [[redirects]]
+     from = "/velvetpalms"
+     to = "https://<new-site>.netlify.app/velvetpalms"
+     status = 200
+     force = true
+
+   [[redirects]]
+     from = "/velvetpalms/*"
+     to = "https://<new-site>.netlify.app/velvetpalms/:splat"
+     status = 200
+     force = true
+   ```
+
+All pages, files and the staff area live under `/velvetpalms` (set by `basePath` in `next.config.mjs`).
+Booking forms submitted through beamxsolutions.com are allowed by `ALLOWED_ORIGINS` (default: beamxsolutions.com).
+

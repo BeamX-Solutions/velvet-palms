@@ -1,5 +1,6 @@
 import PalmFrond from './PalmFrond';
 import { images, type ImageKey } from '@/lib/images';
+import { asset } from '@/lib/config';
 
 const glows: Record<ImageKey, string> = {
   dining:   'radial-gradient(circle at 30% 70%, rgba(214,170,96,.35), transparent 35%), radial-gradient(circle at 75% 35%, rgba(214,170,96,.18), transparent 30%), linear-gradient(160deg,#0c3828,#021e15)',
@@ -19,7 +20,7 @@ export default function StandIn({ kind, ratio = '4 / 5', className = '' }: Props
     <div className={`standin ${className}`} style={{ aspectRatio: ratio }} role="img" aria-label={img.alt}>
       {img.src ? (
         // eslint-disable-next-line @next/next/no-img-element
-        <img className="photo" src={img.src} alt={img.alt} />
+        <img className="photo" src={asset(img.src)} alt={img.alt} />
       ) : (
         <>
           <div className="glow" style={{ background: glows[kind] }} />

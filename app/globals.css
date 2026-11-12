@@ -170,7 +170,6 @@ p, dl, dd { margin: 0; }
 .door--r { --dir: 1; }
 /* Each leaf carries half of the palm; closed, the gap in the trunk is the seam. */
 .door__mark {
-  --src: url("/brand/emblem-mask.svg");
   position: absolute; top: 50%;
   height: min(34vh, 15rem); aspect-ratio: 776 / 1080;
   background: linear-gradient(160deg, var(--gold-hi), var(--gold) 50%, var(--gold-lo));

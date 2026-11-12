@@ -22,4 +22,10 @@ export const event = {
   shortDate: '12.12.26',
 };
 
-export const siteUrl = (process.env.SITE_URL ?? 'http://localhost:3000').replace(/\/$/, '');
+/** Path the site is served under, e.g. '/velvetpalms' (set in next.config.mjs). */
+export const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
+/** Prefixes a public file path (e.g. '/brand/emblem.svg') with the base path. */
+export const asset = (path: string) => `${basePath}${path}`;
+
+/** Full public address of the site, including the base path. Used in emails and QR codes. */
+export const siteUrl = (process.env.SITE_URL ?? `http://localhost:3000${basePath}`).replace(/\/$/, '');

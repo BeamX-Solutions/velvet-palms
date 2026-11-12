@@ -4,7 +4,7 @@ import BrandLogo from '@/components/BrandLogo';
 import CancelButton from './CancelButton';
 import { SaveCardButton, type CardData } from './StoryCard';
 import ScrollTop from '@/components/ScrollTop';
-import { event } from '@/lib/config';
+import { asset, event } from '@/lib/config';
 import { fmtDate, fmtTime } from '@/lib/format';
 import { getReservation } from '@/lib/reservations';
 
@@ -59,7 +59,7 @@ export default async function ReservationPage({ params, searchParams }: {
           ) : (
             <>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img className="qr" src={`/api/qr/${r.code}`} alt={`QR code for reservation ${r.code}`} />
+              <img className="qr" src={asset(`/api/qr/${r.code}`)} alt={`QR code for reservation ${r.code}`} />
               <p className="code">{r.code}</p>
               <p className="muted" style={{ fontSize: '0.9rem', margin: '14px 0 0' }}>Reserved for {r.full_name}</p>
               {r.checked_in_at && <p className="pill ok" style={{ marginTop: 14 }}>Checked in</p>}

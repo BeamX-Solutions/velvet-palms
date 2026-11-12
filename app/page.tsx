@@ -4,11 +4,13 @@ import Countdown from '@/components/Countdown';
 import PalmFrond from '@/components/PalmFrond';
 import { Reveal, Sheet } from '@/components/Reveal';
 import RoomExplorer from '@/components/RoomExplorer';
-import { event } from '@/lib/config';
+import { asset, event } from '@/lib/config';
 import { fmtTime } from '@/lib/format';
 import { safeSittings } from '@/lib/reservations';
 
 export const dynamic = 'force-dynamic';
+
+const doorMark = { '--src': `url("${asset('/brand/emblem-mask.svg')}")` } as React.CSSProperties;
 
 export default async function Home() {
   const sittings = await safeSittings();
@@ -21,8 +23,8 @@ export default async function Home() {
   return (
     <>
       <div className="doors" aria-hidden="true">
-        <div className="door door--l"><span className="door__mark" /></div>
-        <div className="door door--r"><span className="door__mark" /></div>
+        <div className="door door--l"><span className="door__mark" style={doorMark} /></div>
+        <div className="door door--r"><span className="door__mark" style={doorMark} /></div>
       </div>
 
       <section className="hero">

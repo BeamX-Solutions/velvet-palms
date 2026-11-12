@@ -1,4 +1,5 @@
 'use client';
+import { asset } from '@/lib/config';
 
 export type CardData = {
   name: string;
@@ -45,7 +46,7 @@ async function storyCard(c: CardData) {
   ctx.strokeRect(64, 64, W - 128, H - 128);
 
   const mark = new Image();
-  mark.src = '/brand/emblem.svg';
+  mark.src = asset('/brand/emblem.svg');
   await mark.decode().catch(() => {});
   if (mark.naturalWidth) ctx.drawImage(mark, W / 2 - 83, 220, 166, 231);
 

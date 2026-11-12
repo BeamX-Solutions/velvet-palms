@@ -1,4 +1,5 @@
 import { CancelButton, CheckInButton, SittingToggle } from './Buttons';
+import { asset } from '@/lib/config';
 import { fmtDateTime, fmtTime } from '@/lib/format';
 import { getSittings, listReservations, listWaitlist } from '@/lib/reservations';
 
@@ -21,7 +22,7 @@ export default async function Admin({ searchParams }: { searchParams: Promise<{ 
     <div className="door-list">
       <header>
         <h1 className="display">The guest list</h1>
-        <a className="btn btn--line" href="/api/admin/export">Download CSV</a>
+        <a className="btn btn--line" href={asset('/api/admin/export')}>Download CSV</a>
       </header>
 
       <dl className="door-list__totals mono">
