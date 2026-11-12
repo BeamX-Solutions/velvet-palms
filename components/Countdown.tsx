@@ -1,40 +1,32 @@
-"use client";
+'use client';
+import { useEffect, useState } from 'react';
 
-import { useEffect, useState } from "react";
+function parts(target: number) {
+  const diff = Math.max(target - Date.now(), 0);
+  return {
+    Days: Math.floor(diff / 86_400_000),
+    Hours: Math.floor((diff / 3_600_000) % 24),
+    Minutes: Math.floor((diff / 60_000) % 60),
+    Seconds: Math.floor((diff / 1000) % 60),
+  };
+}
 
-const pad = (n: number) => String(n).padStart(2, "0");
-
-/** `to` is a wall-clock time with no zone, so it is read in the visitor's own clock. */
-export function Countdown({ to }: { to: string }) {
-  const [now, setNow] = useState<number | null>(null);
-
+export default function Countdown({ dateISO }: { dateISO: string }) {
+  const target = new Date(dateISO).getTime();
+  const [p, setP] = useState<ReturnType<typeof parts> | null>(null);
   useEffect(() => {
-    setNow(Date.now());
-    const t = setInterval(() => setNow(Date.now()), 1000);
-    return () => clearInterval(t);
-  }, []);
-
-  if (now === null) return <span className="count">&nbsp;</span>;
-
-  const left = new Date(to).getTime() - now;
-  if (left <= 0) return <span className="count">They&rsquo;re open. Come in.</span>;
-
-  const s = Math.floor(left / 1000);
-  const parts: [number, string][] = [
-    [Math.floor(s / 86400), "d"],
-    [Math.floor(s / 3600) % 24, "h"],
-    [Math.floor(s / 60) % 60, "m"],
-    [s % 60, "s"],
-  ];
-
+    setP(parts(target));
+    const id = setInterval(() => setP(parts(target)), 1000);
+    return () => clearInterval(id);
+  }, [target]);
   return (
-    <span className="count" suppressHydrationWarning>
-      {parts.map(([n, unit]) => (
-        <span key={unit}>
-          {pad(n)}
-          <i>{unit}</i>
-        </span>
+    <div className="countdown" aria-label="Countdown to opening night" role="timer">
+      {Object.entries(p ?? { Days: '--', Hours: '--', Minutes: '--', Seconds: '--' }).map(([k, v]) => (
+        <div key={k}>
+          <b>{typeof v === 'number' ? String(v).padStart(2, '0') : v}</b>
+          <span>{k}</span>
+        </div>
       ))}
-    </span>
+    </div>
   );
 }

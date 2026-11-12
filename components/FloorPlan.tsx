@@ -2,7 +2,7 @@
 
 import type { ZoneId } from "@/lib/zones";
 import { zones } from "@/lib/zones";
-import { site } from "@/site.config";
+import { event } from "@/lib/config";
 
 /*
  * Redrawn from sheet 02 of the architect's set. Proportions follow the drawing,
@@ -185,7 +185,7 @@ export function FloorPlan({
       <g className="plan__dim">
         <path d="M20 624H430M570 624H980M14 630L26 618M974 630L986 618M20 604V634M980 604V634" />
         <text className="tag tag--quiet" x={500} y={628} textAnchor="middle">
-          {site.roomWidthMm.toLocaleString("en-GB")}
+          {event.roomWidthMm.toLocaleString("en-GB")}
         </text>
       </g>
     </svg>

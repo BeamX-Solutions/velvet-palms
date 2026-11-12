@@ -1,60 +1,54 @@
-/** The seven places a guest can ask for, taken from sheet 02 of the floor plan. */
+/** The seven areas of the room, as shown on the floor plan. */
 export const zones = [
   {
     id: "bar",
     name: "The Round Bar",
     tag: "BAR",
-    line: "A full circle under a crown of bottles, dead centre of the room. No corners, so nobody gets stuck in one.",
-    bestFor: "Twos, solo arrivals, people who talk to bartenders",
+    line: "A round bar right in the middle of the room.",
+    bestFor: "Couples, solo guests and anyone who likes to chat with the bartender",
   },
   {
     id: "floor",
     name: "The Floor",
     tag: "FLOOR",
-    line: "Round tables for four on white marble, in the middle of everything. You see who walks in. They see you.",
-    bestFor: "Fours, and dinner done properly",
+    line: "Round tables for four in the centre of the room.",
+    bestFor: "Groups of four and a proper sit-down dinner",
   },
   {
     id: "long",
     name: "The Long Table",
     tag: "LONG TABLE",
-    line: "One table running down the wall, a lot of chairs. Bring a crowd or inherit one.",
-    bestFor: "Birthdays, teams, big families",
+    line: "One long table along the wall, with plenty of seats.",
+    bestFor: "Birthdays, work teams and big families",
   },
   {
     id: "stage",
     name: "Stage Side",
     tag: "STAGE",
-    line: "The tables within reach of the stage. Conversation becomes optional once it starts.",
-    bestFor: "Night owls, and anyone here for the lounge half of the name",
+    line: "Tables close to the stage and the live entertainment.",
+    bestFor: "Music lovers and late nights",
   },
   {
     id: "velvet",
     name: "The Velvet Booths",
     tag: "V.I.P",
-    line: "Deep booths off the main floor, behind the palms. You can see the room. The room has to work to see you.",
-    bestFor: "Sixes and up, and occasions",
+    line: "Private booths tucked away behind the palms.",
+    bestFor: "Groups of six or more and special occasions",
   },
   {
     id: "booths",
     name: "The Corner Booths",
     tag: "BOOTHS",
-    line: "Banquettes beside the pastry counter. Dangerous, if you were planning to skip dessert.",
-    bestFor: "Twos and threes with a sweet tooth",
+    line: "Cosy booths next to the pastry counter.",
+    bestFor: "Couples and small groups",
   },
   {
     id: "terrace",
     name: "The Terrace",
     tag: "TERRACE",
-    line: "The open-air curve that wraps the back of the room. Same menu, more sky.",
-    bestFor: "Warm nights and long conversations",
+    line: "Outdoor seating around the back of the building.",
+    bestFor: "Warm evenings and fresh air",
   },
 ] as const;
 
 export type ZoneId = (typeof zones)[number]["id"];
-
-export const ANYWHERE = "anywhere";
-
-export function zoneName(id: string) {
-  return zones.find((z) => z.id === id)?.name ?? "Wherever you put us";
-}

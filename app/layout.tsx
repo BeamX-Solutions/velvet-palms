@@ -1,44 +1,41 @@
-import type { Metadata, Viewport } from "next";
-import { Bodoni_Moda, DM_Mono, Jost, Ms_Madi } from "next/font/google";
-import { site } from "@/site.config";
-import "./globals.css";
-
-const display = Bodoni_Moda({
-  subsets: ["latin"],
-  style: ["normal", "italic"],
-  variable: "--font-display",
-});
-const script = Ms_Madi({ subsets: ["latin"], weight: "400", variable: "--font-script" });
-const sans = Jost({ subsets: ["latin"], variable: "--font-sans" });
-const mono = DM_Mono({ subsets: ["latin"], weight: ["400", "500"], variable: "--font-mono" });
+import type { Metadata, Viewport } from 'next';
+import './globals.css';
+import Nav from '@/components/Nav';
+import Footer from '@/components/Footer';
+import { siteUrl } from '@/lib/config';
 
 export const metadata: Metadata = {
-  title: `${site.name} — Opening night has a list`,
-  description: `${site.name} ${site.descriptor} opens ${site.opening.dateLabel}. Walk the room, pick your spot, put your name down.`,
+  metadataBase: new URL(siteUrl),
+  title: { default: 'Velvet Palms Opening Night | 12 December 2026, Awka', template: '%s | Velvet Palms Opening Night' },
+  description: 'Opening Night at Velvet Palms Restaurant & Lounge, Awka: Saturday 12 December 2026. Two sittings, 100 seats. Reserve yours free.',
   openGraph: {
-    title: `${site.name} — Opening night has a list`,
-    description: `Doors open ${site.opening.dateLabel}. Put your name down.`,
-    type: "website",
+    title: 'Velvet Palms Opening Night | 12 December 2026',
+    description: 'Opening Night in Awka. 100 seats. Reserve yours.',
+    images: ['/brand/logo-full.png'],
   },
 };
 
-export const viewport: Viewport = { themeColor: "#011c13" };
+export const viewport: Viewport = { themeColor: '#011c13' };
 
-// Runs before first paint: marks JS as available (so scroll reveals can hide
-// content safely) and skips the doors for anyone who has already walked in.
-const boot = `(function(){var d=document.documentElement;d.classList.add('js');try{if(sessionStorage.getItem('vp-in'))d.classList.add('seen');sessionStorage.setItem('vp-in','1')}catch(e){}})()`;
+// Runs before first paint, on every full load or reload:
+// - marks JS as available (so scroll reveals can hide content safely);
+// - always starts at the top: no restored scroll position, and any #section in the address is
+//   dropped before the browser can jump to it;
+// - on the home page, opens the curtain, then clears the flag once it has finished so moving
+//   around inside the site does not replay it.
+const boot = `(function(){var d=document.documentElement;d.classList.add('js');try{if('scrollRestoration' in history)history.scrollRestoration='manual';if(location.hash)history.replaceState(null,'',location.pathname+location.search);}catch(e){}var top=function(){window.scrollTo({top:0,left:0,behavior:'instant'})};top();addEventListener('load',top);if(location.pathname==='/'){d.classList.add('doors-on');setTimeout(function(){d.classList.remove('doors-on')},3000)}})()`;
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html
-      lang="en"
-      className={`${display.variable} ${script.variable} ${sans.variable} ${mono.variable}`}
-      suppressHydrationWarning
-    >
+    <html lang="en" suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: boot }} />
       </head>
-      <body>{children}</body>
+      <body>
+        <Nav />
+        <main id="top">{children}</main>
+        <Footer />
+      </body>
     </html>
   );
 }
