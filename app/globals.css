@@ -388,7 +388,8 @@ html.js .reveal.in > :nth-child(3) { transition-delay: 0.16s; }
 
 /* Staff sign-in */
 /* One screen, no footer: fills exactly the space under the 78px nav. */
-body:has(.staff-login) .footer { display: none; }
+/* No footer anywhere in the staff area (login, guest list, check-in, staff). */
+body:has(.staff-login, .door-list) .footer { display: none; }
 .staff-login { min-height: calc(100vh - 79px); min-height: calc(100dvh - 79px); display: grid; place-items: center; padding: 1.5rem var(--gutter); }
 .staff-login__card { width: 100%; max-width: 420px; display: grid; justify-items: center; text-align: center; gap: 0.5rem; padding: clamp(24px, 4vh, 40px) clamp(22px, 4vw, 36px); }
 .staff-login__mark { height: 2.8rem; width: auto; margin-bottom: 0.4rem; }
