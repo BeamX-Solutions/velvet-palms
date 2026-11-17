@@ -13,7 +13,8 @@ capped at 100 seats.
 |---|---|---|
 | Home | `/` | Hero and countdown, floor plan, kitchen, lounge & bar, live sittings and the reservation form (becomes a waitlist when full). `/opening-night`, `/experience` and `/visit` redirect here |
 | Reservation ticket | `/reservation/VP-XXXXXXXX` | QR code, add-to-calendar, guest self-cancel |
-| Staff guest list | `/admin` | Password protected. Counts, search, check-in, cancel, close a sitting, waitlist, CSV export |
+| Staff guest list | `/admin` | Sign in at `/admin/login` (12-hour session). Admins: everything. Door staff: check-in and search by name or code only. Counts, search, check-in, cancel, close a sitting, waitlist, CSV export |
+| Staff accounts | `/admin/staff` | Admins add people, set their role (door staff or admin), reset passwords, pause, reactivate or remove them |
 | Door check-in | `/admin/checkin/VP-XXXXXXXX` | Opened by scanning the guest's QR code with any phone camera |
 
 ### How the 100-seat limit works
@@ -59,7 +60,8 @@ npm run dev                       # http://localhost:3000
 - [ ] Confirm opening date and sitting times (currently 12 Dec 2026, 6:30 PM and 9:00 PM)
 - [ ] Real address, phone, email, Instagram handle in `lib/config.ts`
 - [ ] Real photos and final menu
-- [ ] Strong `ADMIN_PASSWORD`; share it only with door staff
+- [ ] Strong `ADMIN_PASSWORD` for the built-in owner login (keep it to the organisers)
+- [ ] Run `npm run db:setup` once to create the `staff` table, then add each person at `/admin/staff`
 - [ ] Domain bought, `SITE_URL` updated, Resend domain verified
 - [ ] Note: the logo reads "Since 2025"; confirm with the client if the opening is in 2026
 

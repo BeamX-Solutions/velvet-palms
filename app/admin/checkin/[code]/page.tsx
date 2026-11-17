@@ -1,4 +1,6 @@
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
+import { getSession } from '@/lib/auth';
 import { CheckInButton } from '../../Buttons';
 import BrandLogo from '@/components/BrandLogo';
 import { fmtTime } from '@/lib/format';
@@ -10,6 +12,7 @@ export const metadata = { title: 'Check-in', robots: { index: false } };
 // Staff scan a guest's QR code with any phone camera; it opens this page.
 export default async function CheckIn({ params }: { params: Promise<{ code: string }> }) {
   const { code } = await params;
+  if (!(await getSession())) redirect(`/admin/login?next=${encodeURIComponent(`/admin/checkin/${code}`)}`);
   const r = await getReservation(code);
   return (
     <div className="door-list">

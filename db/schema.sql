@@ -103,3 +103,21 @@ where not exists (select 1 from sittings);
 alter table sittings     enable row level security;
 alter table reservations enable row level security;
 alter table waitlist     enable row level security;
+
+-- Staff accounts the admin adds from /admin/staff. The owner login (ADMIN_USER / ADMIN_PASSWORD
+-- environment variables) is separate and always works.
+-- session_epoch is bumped to sign a person out everywhere (password reset, role change, pause).
+create table if not exists staff (
+  id             serial primary key,
+  username       text not null,
+  display_name   text not null,
+  role           text not null default 'door' check (role in ('admin', 'door')),
+  password_hash  text not null,
+  active         boolean not null default true,
+  session_epoch  int not null default 0,
+  created_at     timestamptz not null default now(),
+  created_by     text,
+  last_login_at  timestamptz
+);
+create unique index if not exists staff_username on staff (lower(username));
+alter table staff enable row level security;

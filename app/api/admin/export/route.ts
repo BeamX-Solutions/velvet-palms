@@ -1,3 +1,4 @@
+import { getSession } from '@/lib/auth';
 import { listReservations } from '@/lib/reservations';
 
 export const dynamic = 'force-dynamic';
@@ -9,6 +10,7 @@ const cell = (v: unknown) => {
 };
 
 export async function GET() {
+  if ((await getSession())?.role !== 'admin') return new Response('Admin only', { status: 403 });
   const rows = await listReservations();
   const head = ['code', 'status', 'full_name', 'email', 'phone', 'party_size', 'sitting', 'starts_at', 'occasion', 'notes', 'checked_in_at', 'created_at'];
   const lines = rows.map((r) => [r.code, r.status, r.full_name, r.email, r.phone, r.party_size, r.sitting_label, r.starts_at, r.occasion, r.notes, r.checked_in_at, r.created_at].map(cell).join(','));
